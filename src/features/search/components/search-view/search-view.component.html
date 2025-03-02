@@ -14,10 +14,11 @@
   </div>
   @if((sortService.sortedMovies$ | async)!.length > 0){
   <div class="mt-12 md:mt-24 pb-12 flex flex-col text-white font-sans max-w-screen overflow-auto mx-6 md:mx-24">
-    <div class="min-w-max">
+    <div class="min-w-max" cdkDropList (cdkDropListDropped)="onColumnDrop($event)">
       <div class="flex gap-10 border-b border-yellow-400 p-4">
         @for(columnHeading of SEARCH_RESULT_DATA; track $index){
-        <div class="w-32" (click)="sort(columnHeading)">
+        <div class="w-32" [ngClass]="{ 'flex-1 w-64': columnHeading === 'Plot' }" (click)="sort(columnHeading)" cdkDrag
+          [cdkDragData]="$index">
           <button
             class="font-bold border cursor-pointer border-yellow-400 rounded-full p-2 text-center text-yellow-400 w-32 hover:bg-yellow-400 hover:text-neutral-950 transition-colors"
             [ngClass]="{

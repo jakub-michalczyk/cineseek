@@ -1,3 +1,4 @@
+import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
 import { Component, signal } from '@angular/core';
 import {
@@ -35,6 +36,7 @@ import { SEARCH_RESULT_DATA } from '../search-view.data';
     MatFormFieldModule,
     MatInputModule,
     ReactiveFormsModule,
+    DragDropModule,
   ],
   templateUrl: './search-view.component.html',
 })
@@ -59,6 +61,25 @@ export class SearchViewComponent {
 
   sort(column: keyof ISearchResult) {
     this.sortService.toggleSortByColumn(column);
+  }
+
+  onColumnDrop(event: CdkDragDrop<number>) {
+    const previousIndex = event.item.data as number;
+    let newIndex = previousIndex;
+
+    if (event.distance.x > 0) {
+      newIndex = Math.min(
+        previousIndex + 1,
+        this.SEARCH_RESULT_DATA.length - 1
+      );
+    } else if (event.distance.x < 0) {
+      newIndex = Math.max(previousIndex - 1, 0);
+    }
+
+    if (newIndex !== previousIndex) {
+      const [removed] = this.SEARCH_RESULT_DATA.splice(previousIndex, 1);
+      this.SEARCH_RESULT_DATA.splice(newIndex, 0, removed);
+    }
   }
 
   private search() {
