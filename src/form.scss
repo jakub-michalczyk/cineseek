@@ -1,0 +1,14 @@
+@use '@angular/material' as mat;
+
+:root {
+  @include mat.form-field-overrides((
+    filled-container-color: white,
+    filled-active-indicator-height: 0,
+    filled-focus-active-indicator-height: 0
+  ));
+}
+
+.mdc-text-field--filled {
+  border-radius: 25px !important;
+}
+

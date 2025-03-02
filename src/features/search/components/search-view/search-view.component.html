@@ -1,0 +1,67 @@
+<div class="font-thin mt-24">
+  <div class="max-w-3xl mx-auto">
+    <div class="px-6">
+      <h1 class="text-5xl md:text-6xl text-yellow-400 font-serif">
+        Search for a movie
+      </h1>
+      <form class="mt-12 w-full mx-auto" [formGroup]="searchForm">
+        <mat-form-field class="w-full">
+          <mat-label>Search</mat-label>
+          <input formControlName="query" matInput placeholder="Ex. Forrest Gump" />
+        </mat-form-field>
+      </form>
+    </div>
+  </div>
+  @if((sortService.sortedMovies$ | async)!.length > 0){
+  <div class="mt-12 md:mt-24 pb-12 flex flex-col text-white font-sans max-w-screen overflow-auto mx-6 md:mx-24">
+    <div class="min-w-max" cdkDropList (cdkDropListDropped)="onColumnDrop($event)">
+      <div class="flex gap-10 border-b border-yellow-400 p-4">
+        @for(columnHeading of SEARCH_RESULT_DATA; track $index){
+        <div class="w-32" [ngClass]="{ 'flex-1 w-64': columnHeading === 'Plot' }" (click)="sort(columnHeading)" cdkDrag
+          [cdkDragData]="$index">
+          <button
+            class="font-bold border cursor-pointer border-yellow-400 rounded-full p-2 text-center text-yellow-400 w-32 hover:bg-yellow-400 hover:text-neutral-950 transition-colors"
+            [ngClass]="{
+              'bg-yellow-400 !text-neutral-950':
+                sortService.sortColumn === columnHeading
+            }">
+            {{ columnHeading }}
+            @if(sortService.sortColumn === columnHeading){
+            {{ sortService.ascending ? "↑" : "↓" }}
+            }
+          </button>
+        </div>
+        }
+      </div>
+
+      @for(result of sortService.sortedMovies$ | async; track $index) {
+      <div class="flex gap-10 pt-12 items-center px-4 border-white" [ngClass]="{ 'pb-12 border-b': !$last }">
+        @for(columnHeading of SEARCH_RESULT_DATA; track $index){
+        <div class="w-32" [ngClass]="{ 'flex-1 w-64': columnHeading === 'Plot' }">
+          @if(columnHeading === 'Poster'){
+          <div class="w-32">
+            <img [src]="getMovieImage(result[columnHeading])" alt="Movie Poster" class="w-full" />
+          </div>
+          } @else {
+          <div class="break-words">
+            {{ result[columnHeading] }}
+          </div>
+          }
+        </div>
+        }
+      </div>
+      }
+    </div>
+  </div>
+  } @else if(noResults()) {
+  <div class="mt-12 text-2xl text-yellow-400 font-semibold max-w-3xl mx-auto px-6">
+    No results found.
+  </div>
+  }
+</div>
+
+<div
+  class="w-full h-full bg-neutral-950 absolute top-0 left-0 text-yellow-400 text-3xl justify-center items-center hidden"
+  [ngClass]="{ '!flex': isLoading() }">
+  Loading...
+</div>

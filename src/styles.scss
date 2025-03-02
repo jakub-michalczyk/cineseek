@@ -1,2 +1,21 @@
-@use "config";
+
+@import "form";
 @import "tailwindcss";
+
+* {
+    $scrollbarSize: 6px;
+
+    &::-webkit-scrollbar {
+        width: $scrollbarSize;
+        height: $scrollbarSize;
+    }
+
+    &::-webkit-scrollbar-track {
+        background-color: oklch(0.145 0 0); // neutral-950
+    }
+
+    &::-webkit-scrollbar-thumb {
+        border-radius: 30px;
+        background-color: #e1cf28; // yellow-400
+    }
+}
