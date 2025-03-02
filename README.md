@@ -1,59 +1,74 @@
-# Cineseek
+# CINESEEK - Movie Search App
 
-This project was generated using [Angular CLI](https://github.com/angular/angular-cli) version 19.0.6.
+CINESEEK is a movie search application built using Angular CLI, which integrates with the OMDB API to search for movies based on queries. The application allows users to view search results, sort them, and move columns within the table for better flexibility.
 
-## Development server
+## Features
 
-To start a local development server, run:
+- **Movie Search**: Search movies based on various queries like title, year, genre, and more.
+- **Sort Results**: Sort movie search results by columns like title, year, etc.
+- **Move Columns**: Reorder columns by dragging and dropping them for a customized view.
+- **OMDB API Integration**: Fetch movie data from the OMDB API.
+
+## Prerequisites
+
+Before running the application, ensure you have the following installed:
+
+- **Node.js** (20.11.1 or later)
+- **Angular CLI** (19.2.0 or later)
+
+## Setup and Installation
+
+### 1. Clone the Repository
+
+First, clone the repository to your local machine:
+
+```bash
+git clone https://github.com/your-username/cineseek.git
+```
+
+### 2. Install Dependencies
+
+Navigate to the project folder and install the required dependencies:
+
+```bash
+cd cineseek
+npm install
+```
+
+### 3. Add OMDB API Key
+
+To interact with the OMDB API, you'll need a valid API key. Follow these steps to add your API key:
+
+- Go to [OMDB API website](https://omdbapi.com/) and sign up for an API key if you don't have one.
+- Once you have your API key, open the **src/environments/environment.ts** file in your project.
+- Paste your API key into the apiKey property:
+
+```bash
+export const environment = {
+  apiKey: 'YOUR_OMDB_API_KEY_HERE'  // Replace with your API key
+};
+```
+
+### 4. Run the Application
+
+Once you've added the API key, you can start the development server:
 
 ```bash
 ng serve
 ```
 
-Once the server is running, open your browser and navigate to `http://localhost:4200/`. The application will automatically reload whenever you modify any of the source files.
+The application will be running at http://localhost:4200.
 
-## Code scaffolding
+### 5. Build the Application
 
-Angular CLI includes powerful code scaffolding tools. To generate a new component, run:
-
-```bash
-ng generate component component-name
-```
-
-For a complete list of available schematics (such as `components`, `directives`, or `pipes`), run:
+To create a production build of the application, run:
 
 ```bash
-ng generate --help
+ng build --configuration=production
 ```
 
-## Building
+This will build the application and output the files in the dist/ directory.
 
-To build the project run:
+### License
 
-```bash
-ng build
-```
-
-This will compile your project and store the build artifacts in the `dist/` directory. By default, the production build optimizes your application for performance and speed.
-
-## Running unit tests
-
-To execute unit tests with the [Karma](https://karma-runner.github.io) test runner, use the following command:
-
-```bash
-ng test
-```
-
-## Running end-to-end tests
-
-For end-to-end (e2e) testing, run:
-
-```bash
-ng e2e
-```
-
-Angular CLI does not come with an end-to-end testing framework by default. You can choose one that suits your needs.
-
-## Additional Resources
-
-For more information on using the Angular CLI, including detailed command references, visit the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+This project is licensed under the MIT License.
