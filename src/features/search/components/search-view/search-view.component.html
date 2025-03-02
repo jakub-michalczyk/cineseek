@@ -1,0 +1,13 @@
+<div class="max-w-6xl mx-auto text-center font-thin mt-24">
+    <h1 class="text-6xl text-yellow-400">Search for a movie</h1>
+    <form class="mt-12 w-3/4 mx-auto" [formGroup]="searchForm">
+        <mat-form-field class="w-full">
+          <mat-label>Search</mat-label>
+          <input formControlName="query" matInput placeholder="Ex. Forrest Gump">
+        </mat-form-field>
+    </form>
+</div>
+
+<div class="w-full h-full bg-neutral-950 absolute top-0 left-0 text-yellow-400 text-3xl justify-center items-center hidden" [ngClass]="{'!flex': isLoading()}">
+  Loading...
+</div>
