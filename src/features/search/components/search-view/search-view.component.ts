@@ -9,6 +9,7 @@ import {
 } from '@angular/forms';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import {
   catchError,
   debounceTime,
@@ -37,6 +38,7 @@ import { SEARCH_RESULT_DATA } from '../search-view.data';
     MatInputModule,
     ReactiveFormsModule,
     DragDropModule,
+    MatProgressSpinnerModule,
   ],
   templateUrl: './search-view.component.html',
 })
