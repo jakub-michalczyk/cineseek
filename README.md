@@ -1,6 +1,6 @@
-# CINESEEK - Movie Search App
+<img src="https://github.com/jakub-michalczyk/cineseek/blob/master/public/images/logo.svg" width="150px">
 
-CINESEEK is a movie search application built using Angular CLI, which integrates with the OMDB API to search for movies based on queries. The application allows users to view search results, sort them, and move columns within the table for better flexibility.
+CINESEEK is a movie search application built using Angular, which integrates with the OMDB API to search for movies based on queries. The application allows users to view search results, sort them, and move columns within the table for better flexibility.
 
 ## Features
 
