@@ -1,6 +1,9 @@
-
+@use '@angular/material' as mat;
 @import "form";
 @import "tailwindcss";
+
+
+$red-650: #c1121f;
 
 * {
     $scrollbarSize: 6px;
@@ -16,6 +19,15 @@
 
     &::-webkit-scrollbar-thumb {
         border-radius: 30px;
-        background-color: #e1cf28; // yellow-400
+        background-color: $red-650;
     }
 }
+
+@theme {
+    --color-red-650: #c1121f;
+    --font-main: "National Park", sans-serif;
+}
+
+@include mat.progress-spinner-overrides((
+    active-indicator-color: $red-650
+));

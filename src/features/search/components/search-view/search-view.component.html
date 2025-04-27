@@ -1,30 +1,49 @@
-<div class="font-thin mt-24">
-  <div class="max-w-3xl mx-auto">
-    <div class="px-6">
-      <h1 class="text-5xl md:text-6xl text-yellow-400 font-serif">
-        Search for a movie
+<div class="mt-24">
+  <div class="max-w-lg mx-auto">
+    <div
+      class="px-6 bg-[url(/images/movie.png)] bg-contain bg-no-repeat bg-right-top"
+    >
+      <h1 class="text-4xl text-red-650 font-main text-center">
+        SEARCH FOR A <span class="text-white">MOVIE</span>
       </h1>
-      <form class="mt-12 w-full mx-auto" [formGroup]="searchForm">
+      <form class="mt-12 w-full mx-auto font-thin" [formGroup]="searchForm">
         <mat-form-field class="w-full">
           <mat-label>Search</mat-label>
-          <input formControlName="query" matInput placeholder="Ex. Forrest Gump" />
+          <input
+            formControlName="query"
+            matInput
+            placeholder="Ex. Forrest Gump"
+          />
         </mat-form-field>
       </form>
     </div>
   </div>
+
   @if((sortService.sortedMovies$ | async)!.length > 0){
-  <div class="mt-12 md:mt-24 pb-12 flex flex-col text-white font-sans max-w-screen overflow-auto mx-6 md:mx-24">
-    <div class="min-w-max" cdkDropList (cdkDropListDropped)="onColumnDrop($event)">
-      <div class="flex gap-10 border-b border-yellow-400 p-4">
+  <div
+    class="mt-12 md:mt-24 pb-12 flex flex-col text-white font-sans max-w-screen overflow-auto mx-6 md:mx-24"
+  >
+    <div
+      class="min-w-max"
+      cdkDropList
+      (cdkDropListDropped)="onColumnDrop($event)"
+    >
+      <div class="flex gap-10 border-b border-red-650 p-4">
         @for(columnHeading of SEARCH_RESULT_DATA; track $index){
-        <div class="w-32" [ngClass]="{ 'flex-1 w-64': columnHeading === 'Plot' }" (click)="sort(columnHeading)" cdkDrag
-          [cdkDragData]="$index">
+        <div
+          class="w-32"
+          [ngClass]="{ 'flex-1 w-64': columnHeading === 'Plot' }"
+          (click)="sort(columnHeading)"
+          cdkDrag
+          [cdkDragData]="$index"
+        >
           <button
-            class="font-bold border cursor-pointer border-yellow-400 rounded-full p-2 text-center text-yellow-400 w-32 hover:bg-yellow-400 hover:text-neutral-950 transition-colors"
+            class="font-bold border cursor-pointer border-red-650 rounded-full p-2 text-center text-red-650 w-32 hover:bg-red-650 hover:text-neutral-950 transition-colors"
             [ngClass]="{
-              'bg-yellow-400 !text-neutral-950':
+              'bg-red-650 !text-neutral-950':
                 sortService.sortColumn === columnHeading
-            }">
+            }"
+          >
             {{ columnHeading }}
             @if(sortService.sortColumn === columnHeading){
             {{ sortService.ascending ? "↑" : "↓" }}
@@ -35,12 +54,22 @@
       </div>
 
       @for(result of sortService.sortedMovies$ | async; track $index) {
-      <div class="flex gap-10 pt-12 items-center px-4 border-white" [ngClass]="{ 'pb-12 border-b': !$last }">
+      <div
+        class="flex gap-10 pt-12 items-center px-4 border-white"
+        [ngClass]="{ 'pb-12 border-b': !$last }"
+      >
         @for(columnHeading of SEARCH_RESULT_DATA; track $index){
-        <div class="w-32" [ngClass]="{ 'flex-1 w-64': columnHeading === 'Plot' }">
+        <div
+          class="w-32"
+          [ngClass]="{ 'flex-1 w-64': columnHeading === 'Plot' }"
+        >
           @if(columnHeading === 'Poster'){
           <div class="w-32">
-            <img [src]="getMovieImage(result[columnHeading])" alt="Movie Poster" class="w-full" />
+            <img
+              [src]="getMovieImage(result[columnHeading])"
+              alt="Movie Poster"
+              class="w-full"
+            />
           </div>
           } @else {
           <div class="break-words">
@@ -54,14 +83,15 @@
     </div>
   </div>
   } @else if(noResults()) {
-  <div class="mt-12 text-2xl text-yellow-400 font-semibold max-w-3xl mx-auto px-6">
+  <div class="mt-12 text-2xl text-red-650 max-w-3xl mx-auto px-6 font-main">
     No results found.
   </div>
   }
 </div>
 
 <div
-  class="w-full h-full bg-neutral-950 absolute top-0 left-0 text-yellow-400 text-3xl justify-center items-center hidden"
-  [ngClass]="{ '!flex': isLoading() }">
-  Loading...
+  class="w-full h-full bg-neutral-950 absolute top-0 left-0 text-red-650 text-3xl justify-center items-center hidden"
+  [ngClass]="{ '!flex': isLoading() }"
+>
+  <mat-spinner [diameter]="50"></mat-spinner>
 </div>
