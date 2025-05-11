@@ -1,6 +1,6 @@
 import { CdkDragDrop, DragDropModule } from '@angular/cdk/drag-drop';
 import { CommonModule } from '@angular/common';
-import { Component, signal } from '@angular/core';
+import { Component, DestroyRef, signal } from '@angular/core';
 import {
   FormBuilder,
   FormGroup,
@@ -10,24 +10,19 @@ import {
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
-import {
-  catchError,
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  forkJoin,
-  map,
-  of,
-  switchMap,
-  tap,
-} from 'rxjs';
+import { debounceTime, distinctUntilChanged } from 'rxjs';
 import { SortService } from '../../../../shared/services/sort.service';
-import {
-  ISearchResult,
-  ISearchResultsDTO,
-} from '../../interfaces/search.interface';
-import { SearchService } from '../../services/search.service';
+import { ISearchResult } from '../../interfaces/search.interface';
 import { SEARCH_RESULT_DATA } from '../search-view.data';
+import { Store } from '@ngrx/store';
+import {
+  selectLoading,
+  selectNoResults,
+  selectQuery,
+  selectResults,
+} from '../../store/search-view.selectors';
+import { setQuery } from '../../store/search-view.actions';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-search-view',
@@ -50,8 +45,9 @@ export class SearchViewComponent {
 
   constructor(
     private fb: FormBuilder,
-    private searchService: SearchService,
-    protected sortService: SortService
+    protected sortService: SortService,
+    private store: Store,
+    private destroyerRef: DestroyRef
   ) {
     this.initForm();
     this.search();
@@ -89,49 +85,35 @@ export class SearchViewComponent {
       .pipe(
         debounceTime(300),
         distinctUntilChanged(),
-        filter((query) => query.trim().length > 0),
-        tap(() => {
-          this.isLoading.set(true);
-          this.noResults.set(false);
-        }),
-        switchMap((query) =>
-          this.searchService.searchMovies(query).pipe(
-            map((result: ISearchResultsDTO) => result.Search || []),
-            tap((movies) => {
-              if (movies.length === 0) {
-                this.noResults.set(true);
-              }
-            }),
-            catchError(() => {
-              this.noResults.set(true);
-              return of([]);
-            })
-          )
-        ),
-        switchMap((movies) =>
-          movies.length > 0
-            ? forkJoin(
-                movies.map((movie) =>
-                  this.searchService
-                    .getMovieDetails(movie.imdbID)
-                    .pipe(catchError(() => of(null)))
-                )
-              )
-            : of([])
-        ),
-        tap(() => this.isLoading.set(false))
+        takeUntilDestroyed(this.destroyerRef)
       )
-      .subscribe({
-        next: (movies: (ISearchResult | null)[]) => {
-          this.sortService.setMovies(movies as ISearchResult[]);
-        },
-        error: () => this.isLoading.set(false),
+      .subscribe((query) => {
+        this.store.dispatch(setQuery({ query }));
+      });
+
+    this.store
+      .select(selectLoading)
+      .pipe(takeUntilDestroyed(this.destroyerRef))
+      .subscribe((loading) => this.isLoading.set(loading));
+    this.store
+      .select(selectNoResults)
+      .pipe(takeUntilDestroyed(this.destroyerRef))
+      .subscribe((noResults) => this.noResults.set(noResults));
+    this.store
+      .select(selectResults)
+      .pipe(takeUntilDestroyed(this.destroyerRef))
+      .subscribe((results) => {
+        this.sortService.setMovies(results);
       });
   }
 
   private initForm() {
     this.searchForm = this.fb.group({
       query: [''],
+    });
+
+    this.store.select(selectQuery).subscribe((query) => {
+      this.searchForm.patchValue({ query }, { emitEvent: false });
     });
   }
 }
